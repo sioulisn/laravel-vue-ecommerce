@@ -8,18 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'=> ['required', 'email'],
             'password' => 'required',
             'remember' => 'boolean'
         ]);
         $remember = $credentials['remember'] ?? false;
         unset($credentials['remember']);
-        if (Auth::attempt($credentials, $remember)){
+        if (!Auth::attempt($credentials, $remember)) {
             return response([
-               'message' => 'Email or password is incorrect'
+                'message' => 'Email or password is incorrect'
             ], 422);
         }
         /** @var \App\Models\User $user */
